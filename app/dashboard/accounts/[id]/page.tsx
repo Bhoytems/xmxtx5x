@@ -2,6 +2,8 @@ import TopBar from "@/components/TopBar";
 import CapProgress from "@/components/CapProgress";
 import { supabaseAdmin } from "@/lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 async function getAccountData(id: string) {
   const [{ data: account }, { data: settings }, { data: usage }, { data: trades }] = await Promise.all([
     supabaseAdmin.from("client_accounts").select("*").eq("id", id).single(),
