@@ -1,6 +1,8 @@
 import TopBar from "@/components/TopBar";
 import { supabaseAdmin } from "@/lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 async function getSignalLog() {
   const { data } = await supabaseAdmin
     .from("signal_log")
