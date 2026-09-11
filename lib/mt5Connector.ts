@@ -51,7 +51,23 @@ export interface OrderRequest {
   takeProfit?: number;
 }
 
+export interface ProvisionAccountRequest {
+  platform: "mt4" | "mt5";
+  login: string;
+  password: string; // investor (read-only) password strongly preferred over the trading password
+  server: string; // broker server name, e.g. "ICMarkets-Live01"
+}
+
 export interface Mt5Connector {
+  /**
+   * Takes raw client credentials ONCE and hands them to the connection
+   * provider (e.g. MetaApi) to provision the account there. Returns only
+   * a connection reference — the credential itself must never be
+   * returned to the caller or written to our own database. Implementers
+   * must call the provider's API directly from here and let the
+   * provider hold the secret in its own vault.
+   */
+  provisionAccount(req: ProvisionAccountRequest): Promise<{ connectionRef: string }>;
   getAccountSnapshot(connectionRef: string): Promise<AccountSnapshot>;
   getOpenPositions(connectionRef: string): Promise<OpenPosition[]>;
   placeOrder(connectionRef: string, order: OrderRequest): Promise<{ ticket: string }>;
@@ -74,6 +90,24 @@ export interface Mt5Connector {
  * once you've chosen a connection method above.
  */
 export class MockMt5Connector implements Mt5Connector {
+  async provisionAccount(req: ProvisionAccountRequest): Promise<{ connectionRef: string }> {
+    // TODO: replace with a real call, e.g. MetaApi's account provisioning API:
+    //
+    //   const metaApi = new MetaApi(process.env.METAAPI_TOKEN!);
+    //   const account = await metaApi.metatraderAccountApi.createAccount({
+    //     login: req.login,
+    //     password: req.password,      // sent directly to MetaApi, never stored here
+    //     server: req.server,
+    //     platform: req.platform,
+    //   });
+    //   return { connectionRef: account.id };
+    //
+    // req.password is intentionally unused below — this mock never
+    // persists it, and neither should any real implementation.
+    void req.password;
+    return { connectionRef: `mock-${req.login}-${Date.now()}` };
+  }
+
   async getAccountSnapshot(): Promise<AccountSnapshot> {
     return { balance: 10000, equity: 10240, openPnl: 240, marginLevel: 1850 };
   }
