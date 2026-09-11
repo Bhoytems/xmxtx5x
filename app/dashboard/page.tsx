@@ -3,6 +3,8 @@ import KpiCard from "@/components/KpiCard";
 import EquityChart from "@/components/EquityChart";
 import { supabaseAdmin } from "@/lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 async function getAccounts() {
   const { data } = await supabaseAdmin.from("client_accounts").select("*");
   return data ?? [];
