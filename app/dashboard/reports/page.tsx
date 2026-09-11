@@ -1,6 +1,8 @@
 import TopBar from "@/components/TopBar";
 import { supabaseAdmin } from "@/lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 async function getAccounts() {
   const { data } = await supabaseAdmin.from("client_accounts").select("id, client_name, equity, balance");
   return data ?? [];
