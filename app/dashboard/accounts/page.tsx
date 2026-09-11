@@ -23,6 +23,14 @@ export default async function AccountsPage() {
     <div>
       <TopBar title="Client accounts" />
       <div className="p-6">
+        <div className="mb-4 flex justify-end">
+          <Link
+            href="/dashboard/accounts/new"
+            className="rounded bg-signal-teal px-3 py-1.5 text-xs font-medium text-base-950"
+          >
+            Connect account
+          </Link>
+        </div>
         <div className="overflow-hidden rounded-lg border border-base-700">
           <table className="w-full text-sm">
             <thead className="bg-base-800 text-left text-xs text-ink-500">
